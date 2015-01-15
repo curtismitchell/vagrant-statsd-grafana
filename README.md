@@ -1,5 +1,7 @@
 ## Background
-I wanted to use statsd to collect metrics on my local machine. And, I wanted a good front-end to view the metrics on a dashboard. After a good amount of failure, I found [this article](http://www.symantec.com/connect/blogs/metrics-cocktail-statsdinfluxdbgrafana)
+I wanted to use statsd to collect metrics on my local machine. And, I wanted a good front-end to view the metrics on a dashboard. After a good amount of failure, I found [this article](http://www.symantec.com/connect/blogs/metrics-cocktail-statsdinfluxdbgrafana).
+
+I adapted the steps into a Vagrantfile.
 
 ## Usage
 
