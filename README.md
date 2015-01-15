@@ -18,4 +18,6 @@ vagrant up
 ```
 
 ### Visit your grafana page
-Open [http://localhost:8083/grafana](http://localhost:8083/grafana) and configure your dashboard.
+Open [http://localhost:8080/grafana](http://localhost:8083/grafana) and configure your dashboard.
+
+![image](https://cloud.githubusercontent.com/assets/20866/5765322/a25572f6-9cc6-11e4-80d7-017797926150.png)
