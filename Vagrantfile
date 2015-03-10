@@ -5,12 +5,20 @@
 VAGRANTFILE_API_VERSION = "2"
 
 $scriptInflux = <<SCRIPT
+wget -qO - https://packages.elasticsearch.org/GPG-KEY-elasticsearch | sudo apt-key add -
+sudo add-apt-repository "deb http://packages.elasticsearch.org/elasticsearch/1.4/debian stable main"
+
 sudo apt-get update
 sudo apt-get -y upgrade
 
 wget http://s3.amazonaws.com/influxdb/influxdb_latest_amd64.deb
 sudo dpkg -i influxdb_latest_amd64.deb
 sudo /etc/init.d/influxdb start
+
+# Install ElasticSearch
+sudo apt-get install elasticsearch
+sudo update-rc.d elasticsearch defaults 95 10
+sudo /etc/init.d/elasticsearch start
 
 sudo apt-get -y install git nodejs python python-setuptools
 cd /opt
@@ -51,6 +59,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # config.vbguest.auto_update = false
   # Every Vagrant virtual environment requires a box to build off of.
   config.vm.box = "ubuntu/trusty64"
+  config.vbguest.auto_update = false
   config.vm.provision "shell", inline: $scriptInflux
 
   config.vm.network :forwarded_port, guest: 8125, host: 8125
