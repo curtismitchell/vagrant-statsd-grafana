@@ -15,11 +15,6 @@ wget http://s3.amazonaws.com/influxdb/influxdb_latest_amd64.deb
 sudo dpkg -i influxdb_latest_amd64.deb
 sudo /etc/init.d/influxdb start
 
-# Install ElasticSearch
-sudo apt-get install elasticsearch
-sudo update-rc.d elasticsearch defaults 95 10
-sudo /etc/init.d/elasticsearch start
-
 sudo apt-get -y install git nodejs python python-setuptools
 cd /opt
 sudo git clone https://github.com/etsy/statsd.git
@@ -35,10 +30,19 @@ sudo mv grafana-1.9.1/ /var/www/html/grafana
 cd /var/www/html/grafana
 sudo cp /vagrant/config.grafana.js config.js
 
+# Install ElasticSearch
+# Install ElasticSearch
+sudo apt-get -y install openjdk-7-jre elasticsearch
+sudo update-rc.d elasticsearch defaults 95 10
+sudo /etc/init.d/elasticsearch start
+
+# Install Kibana
 cd ~
-wget https://bootstrap.pypa.io/get-pip.py
-python get-pip.py
-sudo pip install statsd
+wget https://download.elasticsearch.org/kibana/kibana/kibana-4.0.1-linux-x64.tar.gz
+tar xvf kibana-4.0.1-linux-x64.tar.gz
+sudo mv kibana-4.0.1-linux-x64/ /opt/kibana
+sudo cp /vagrant/kibana.sh /etc/init.d/kibana
+sudo /etc/init.d/kibana start
 
 # Create two databases: demo and dash
 curl -X POST 'http://localhost:8086/db?u=root&p=root' -d '{"name": "demo"}'
@@ -59,6 +63,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # config.vbguest.auto_update = false
   # Every Vagrant virtual environment requires a box to build off of.
   config.vm.box = "ubuntu/trusty64"
+  config.vm.provider "virtualbox" do |vb|
+    # Don't boot with headless mode
+    # vb.gui = true
+    vb.memory = 1024
+    vb.cpus = 2
+  end
   config.vbguest.auto_update = false
   config.vm.provision "shell", inline: $scriptInflux
 
